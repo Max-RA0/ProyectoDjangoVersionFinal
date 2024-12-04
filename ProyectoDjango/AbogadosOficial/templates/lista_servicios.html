@@ -1,0 +1,220 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios de {{ tipo }}</title>
+    <style>
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        header {
+            background-color: #2980b9;
+            padding: 10px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        header img {
+            height: 120px; /* Ajuste de tamaño del logo */
+            width: 120px;
+            border-radius: 50px;
+            box-shadow: black 7px 7px 7px;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px; /* Añadí padding para mejorar la separación */
+            border-radius: 5px; /* Bordes redondeados para enlaces */
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+
+        /* Contenedor principal */
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Título principal */
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Enlaces de acción */
+        a {
+            text-decoration: none;
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+
+        /* Tabla de servicios */
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        td {
+            background-color: #ecf0f1;
+        }
+
+        /* Estilos para botones de acciones (Editar y Eliminar) */
+        .actions a {
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: #3498db; /* Azul para los botones */
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions a:hover {
+            background-color: #2980b9; /* Azul más oscuro en hover */
+        }
+
+        /* Espaciado y alineación de botones */
+        .button-container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<!-- Header con logo y navbar -->
+<header>
+    <img src="{% static 'logo.jpeg' %}" alt="Logo">
+    <nav>
+        <a href="{% url 'lista_asesoria' tipo='asesoria' %}">Asesorías Legales</a>
+        <a href="{% url 'lista_servicios' tipo='divorcio' %}">Divorcios</a>
+        <a href="{% url 'crear_servicio' tipo='asesoria' %}">Crear Asesoría</a>
+        <a href="{% url 'crear_servicio' tipo='divorcio' %}">Crear Divorcio</a>
+    </nav>
+</header>
+
+<h1>Lista de {{ tipo|capfirst }}</h1>
+
+<table>
+    <thead>
+        <tr>
+            {% if tipo == 'asesoria' %}
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Costo</th>
+                <th>Número de Asesorías</th>
+                <th>Especialidad</th>
+            {% elif tipo == 'divorcio' %}
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Costo</th>
+                <th>Duración Estimada</th>
+                <th>Número de Divorcios</th>
+            {% endif %}
+            <th>Acciones</th>
+        </tr>   
+    </thead>
+    <tbody>
+        {% if tipo == 'asesoria' %}
+            {% for servicio in asesorias %}
+                <tr>
+                    <td>{{ servicio.get_nombre_servicio }}</td>
+                    <td>{{ servicio.get_descripcion }}</td>
+                    <td>{{ servicio.get_costo }}</td>
+                    <td>{{ servicio.get_num_asesorias }}</td>
+                    <td>{{ servicio.get_especialidad|default:"No disponible" }}</td>
+                    <td class="actions">
+                        <a href="{% url 'editar_servicio' tipo=tipo pk=servicio.pk %}">Editar</a>
+                        <a href="{% url 'eliminar_servicio' pk=servicio.pk %}">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No hay asesorías disponibles</td>
+                </tr>
+            {% endfor %}
+        {% elif tipo == 'divorcio' %}
+            {% for servicio in servicios %}
+                <tr>
+                    <td>{{ servicio.get_nombre_servicio }}</td>
+                    <td>{{ servicio.get_descripcion }}</td>
+                    <td>{{ servicio.get_costo }}</td>
+                    <td>{{ servicio.get_duracion_estimada }} años</td>
+                    <td>{{ servicio.get_num_divorcios }}</td>
+                    <td class="actions">
+                        <a href="{% url 'editar_servicio' tipo=tipo pk=servicio.pk %}">Editar</a>
+                        <a href="{% url 'eliminar_servicio' pk=servicio.pk %}">Eliminar</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No hay divorcios disponibles</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<div class="button-container">
+    <a href="{% url 'home' %}">Volver a la página principal</a>
+</div>
+
+</body>
+</html>

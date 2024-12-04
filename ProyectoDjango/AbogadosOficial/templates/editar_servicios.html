@@ -1,0 +1,142 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Servicio</title>
+    <style>
+        /* Estilos generales del cuerpo */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: #2980b9;
+            padding: 10px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        header img {
+            height: 120px; /* Ajuste de tamaño del logo */
+            width: 120px;
+            border-radius: 50px;
+            box-shadow: black 7px 7px 7px;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px; /* Añadí padding para mejorar la separación */
+            border-radius: 5px; /* Bordes redondeados para enlaces */
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #3498db;
+            color: white;
+        }
+        /* Contenedor principal */
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Título principal */
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Estilo para el formulario */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        form button {
+            padding: 12px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Enlace de cancelar */
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con logo y navbar -->
+    <header>
+        <img src="{% static 'logo.jpeg' %}" alt="Logo">
+        <nav>
+            <a href="{% url 'lista_asesoria' tipo='asesoria' %}">Asesorías Legales</a>
+            <a href="{% url 'lista_servicios' tipo='divorcio' %}">Divorcios</a>
+            
+            <a href="{% url 'crear_servicio' tipo='asesoria' %}">Crear Asesoría</a>
+            <a href="{% url 'crear_servicio' tipo='divorcio' %}">Crear Divorcio</a>
+        </nav>
+    </header>
+    <h1>Editar servicio</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Actualizar</button>
+    </form>
+
+    <a href="{% url 'home' %}">Cancelar</a>
+</body>
+</html>

@@ -1,0 +1,230 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios Legales</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f8fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: #2980b9;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        form input[type="text"] {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #2980b9;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ecf0f1;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        ul li:hover {
+            background-color: #e0e4e8;
+        }
+
+        ul li .acciones a {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        ul li .acciones a:hover {
+            background-color: #2980b9;
+        }
+
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .button-container a {
+            text-decoration: none;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .button-container a:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            ul li {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+            }
+
+            ul li .acciones a {
+                margin-top: 10px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{% static 'logo.jpeg' %}" alt="Logo">
+        <nav>
+            <a href="{% url 'lista_asesoria' tipo='asesoria' %}">Asesorías Legales</a>
+            <a href="{% url 'lista_servicios' tipo='divorcio' %}">Divorcios</a>
+            <a href="{% url 'crear_servicio' tipo='asesoria' %}">Crear Asesoría</a>
+            <a href="{% url 'crear_servicio' tipo='divorcio' %}">Crear Divorcio</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Bienvenido a los Servicios Legales</h1>
+
+        <form method="GET" action="{% url 'search' %}">
+            <input type="text" name="query" placeholder="Buscar servicios..." value="{{ query }}">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <h2>Asesorías Legales</h2>
+        <ul>
+            {% for servicio, detalle in servicios_asesoria %}
+                <li>
+                    <span>{{ detalle }}</span>
+                    <div class="acciones">
+                        <a href="{% url 'lista_asesoria' tipo='asesoria' %}">Ver mas</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No hay asesorías disponibles.</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Servicios de Divorcio</h2>
+        <ul>
+            {% for servicio, detalle in servicios_divorcio %}
+                <li>
+                    <span>{{ detalle }}</span>
+                    <div class="acciones">
+                        <a href="{% url 'lista_servicios' tipo='divorcio' %}">Ver Más</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li>No hay servicios de divorcio disponibles.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="button-container">
+        <a href="{% url 'home' %}">Volver al Inicio</a>
+    </div>
+</body>
+</html>
